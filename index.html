@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form with Progress Bar</title>
+    <meta
+      name="description"
+      content="A form example with progress bar using Tailwind CSS with dark mode support."
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+
+    <!-- Custom Tailwind Configuration -->
+    <script type="text/javascript">
+      window.tailwind.config = {
+        darkMode: ["class"],
+        theme: {
+          extend: {
+            colors: {
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "hsl(var(--primary))",
+                foreground: "hsl(var(--primary-foreground))",
+              },
+              secondary: {
+                DEFAULT: "hsl(var(--secondary))",
+                foreground: "hsl(var(--secondary-foreground))",
+              },
+              destructive: {
+                DEFAULT: "hsl(var(--destructive))",
+                foreground: "hsl(var(--destructive-foreground))",
+              },
+              muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))",
+              },
+              accent: {
+                DEFAULT: "hsl(var(--accent))",
+                foreground: "hsl(var(--accent-foreground))",
+              },
+              popover: {
+                DEFAULT: "hsl(var(--popover))",
+                foreground: "hsl(var(--popover-foreground))",
+              },
+              card: {
+                DEFAULT: "hsl(var(--card))",
+                foreground: "hsl(var(--card-foreground))",
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Custom CSS Variables for Light/Dark Mode -->
+    <style type="text/tailwindcss">
+      @layer base {
+        :root {
+          --background: 0 0% 100%;
+          --foreground: 240 10% 3.9%;
+          --card: 0 0% 100%;
+          --card-foreground: 240 10% 3.9%;
+          --popover: 0 0% 100%;
+          --popover-foreground: 240 10% 3.9%;
+          --primary: 240 5.9% 10%;
+          --primary-foreground: 0 0% 98%;
+          --secondary: 240 4.8% 95.9%;
+          --secondary-foreground: 240 5.9% 10%;
+          --muted: 240 4.8% 95.9%;
+          --muted-foreground: 240 3.8% 46.1%;
+          --accent: 240 4.8% 95.9%;
+          --accent-foreground: 240 5.9% 10%;
+          --destructive: 0 84.2% 60.2%;
+          --destructive-foreground: 0 0% 98%;
+          --border: 240 5.9% 90%;
+          --input: 240 5.9% 90%;
+          --ring: 240 5.9% 10%;
+          --radius: 0.5rem;
+        }
+
+        .dark {
+          --background: 240 10% 3.9%;
+          --foreground: 0 0% 98%;
+          --card: 240 10% 3.9%;
+          --card-foreground: 0 0% 98%;
+          --popover: 240 10% 3.9%;
+          --popover-foreground: 0 0% 98%;
+          --primary: 0 0% 98%;
+          --primary-foreground: 240 5.9% 10%;
+          --secondary: 240 3.7% 15.9%;
+          --secondary-foreground: 0 0% 98%;
+          --muted: 240 3.7% 15.9%;
+          --muted-foreground: 240 5% 64.9%;
+          --accent: 240 3.7% 15.9%;
+          --accent-foreground: 0 0% 98%;
+          --destructive: 0 62.8% 30.6%;
+          --destructive-foreground: 0 0% 98%;
+          --border: 240 3.7% 15.9%;
+          --input: 240 3.7% 15.9%;
+          --ring: 240 4.9% 83.9%;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-background text-foreground p-6 rounded-lg shadow-lg">
+    <div class="container mx-auto max-w-2xl">
+      <!-- Toggle Dark/Light Mode -->
+  <!--     <div class="mb-4 flex justify-end">
+        <button
+          id="theme-toggle"
+          class="px-4 py-2 bg-primary text-primary-foreground rounded-lg"
+        >
+          Toggle Dark/Light Mode
+        </button>
+      </div> -->
+
+      <!-- Progress Bar -->
+      <div class="mb-4">
+        <div class="relative pt-1">
+          <div class="flex mb-2 items-center justify-between">
+            <span
+              id="step-text"
+              class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-teal-600 bg-teal-200"
+            >
+              Step 1
+            </span>
+            <span
+              id="progress-text"
+              class="text-xs font-semibold inline-block text-teal-600"
+            >
+              20%
+            </span>
+          </div>
+          <div class="flex h-2 mb-4 bg-zinc-200 rounded">
+            <div
+              id="progress-bar"
+              class="bg-teal-600 h-full"
+              style="width: 20%"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Fields -->
+      <form id="form" novalidate>
+        <!-- Step 1: Name, Email, Contact -->
+        <div class="step" id="step-1">
+          <fieldset class="mb-4">
+            <legend class="sr-only">User Information</legend>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="block text-sm font-medium text-primary" for="name"
+                  >Name</label
+                >
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  class="p-4 bg-background text-foreground border border-primary rounded-lg w-full transition focus:outline-none focus:border-primary"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="email"
+                  >Email</label
+                >
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="user@example.com"
+                  class="p-4 bg-background text-foreground border border-primary rounded-lg w-full transition focus:outline-none focus:border-primary"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="contact"
+                  >Contact</label
+                >
+                <input
+                  id="contact"
+                  type="tel"
+                  placeholder="(123)-456-7890"
+                  class="p-4 bg-background text-foreground border border-border rounded-lg w-full transition focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Step 2: Dimensions, Thickness, Material Type -->
+        <div class="step hidden" id="step-2">
+          <fieldset class="mb-4">
+            <legend class="sr-only">Product Specifications</legend>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="dimensions"
+                  >Dimensions</label
+                >
+                <input
+                  id="dimensions"
+                  type="text"
+                  placeholder="3 x 3 x 3 inches"
+                  class="p-4 bg-background text-foreground border border-border rounded-lg w-full transition focus:outline-none focus:border-primary"
+                />
+              </div>
+
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="thickness"
+                  >Thickness</label
+                >
+                <select
+                  id="thickness"
+                  class="p-4 bg-background text-foreground border border-border rounded-lg w-full transition focus:outline-none focus:border-primary"
+                >
+                  <option value="" disabled selected>Select Thickness</option>
+                  <option value="thin">Option 1</option>
+                  <option value="medium">Option 2</option>
+                  <option value="thick">Option 3</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="material"
+                  >Material Type</label
+                >
+                <select
+                  id="material"
+                  class="p-4 bg-background text-foreground border border-border rounded-lg w-full transition focus:outline-none focus:border-primary"
+                >
+                <option value="" disabled selected>Select Material</option>
+                  <option value="type1">Option 1</option>
+                  <option value="type2">Option 2</option>
+                  <option value="type3">Option 3</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Step 3: No. of Colors, Print Type, Add-Ons -->
+        <div class="step hidden" id="step-3">
+          <fieldset class="mb-4">
+            <legend class="sr-only">Print Options</legend>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="colors"
+                  >No. of Colors</label
+                >
+                <select
+                  id="colors"
+                  class="p-4 bg-background text-foreground border border-border rounded-lg w-full transition focus:outline-none focus:border-primary"
+                >
+                <option value="" disabled selected>Select Colors</option>
+                  <option value="1">Option 1</option>
+                  <option value="2">Option 2</option>
+                  <option value="3">Option 3</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="print-type"
+                  >Print Type</label
+                >
+                <select
+                  id="print-type"
+                  class="p-4 bg-background text-foreground border border-border rounded-lg w-full transition focus:outline-none focus:border-primary"
+                >
+                <option value="" selected>Need Assistance</option>
+                  <option value="type1">Option 1</option>
+                  <option value="type2">Option 2</option>
+                  <option value="type3">Option 3</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="addons"
+                  >Add-Ons</label
+                >
+                <select
+                  id="addons"
+                  class="p-4 bg-background text-foreground border border-border rounded-lg w-full transition focus:outline-none focus:border-primary"
+                >
+                <option value="" selected>None</option>
+                  <option value="addon1">Option 1</option>
+                  <option value="addon2">Option 2</option>
+                  <option value="addon3">Option 3</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Step 4: Quantity -->
+        <div class="step hidden" id="step-4">
+          <fieldset class="mb-4">
+            <legend class="sr-only">Quantities</legend>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="quantity1"
+                  >Quantity 1</label
+                >
+                <input
+                  id="quantity1"
+                  type="number"
+                  placeholder="500"
+                  class="p-4 bg-background text-foreground border border-primary rounded-lg w-full transition focus:outline-none focus:border-primary"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="quantity2"
+                  >Quantity 2</label
+                >
+                <input
+                  id="quantity2"
+                  type="number"
+                  placeholder="1000"
+                  class="p-4 bg-background text-foreground border border-border rounded-lg w-full transition focus:outline-none focus:border-primary"
+                />
+              </div>
+
+              <div>
+                <label
+                  class="block text-sm font-medium text-primary"
+                  for="quantity3"
+                  >Quantity 3</label
+                >
+                <input
+                  id="quantity3"
+                  type="number"
+                  placeholder="5000"
+                  class="p-4 bg-background text-foreground border border-border rounded-lg w-full transition focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Step 5: Special Requirements -->
+        <div class="step hidden" id="step-5">
+          <fieldset class="mb-4">
+            <legend class="sr-only">Additional Information</legend>
+            <textarea
+              id="special-requirements"
+              placeholder="Any additional information?"
+              class="p-4 bg-background text-foreground border border-border rounded-lg w-full h-24 transition focus:outline-none focus:border-primary resize-vertical"
+            ></textarea>
+          </fieldset>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between">
+          <button
+            type="button"
+            id="prev"
+            class="px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hidden"
+          >
+            Previous
+          </button>
+          <button
+            type="button"
+            id="next"
+            class="px-4 py-2 bg-primary text-primary-foreground rounded-lg"
+          >
+            Next
+          </button>
+          <button
+            type="submit"
+            id="submit"
+            class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hidden"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- JavaScript to Handle Progress, Navigation, and Theme Toggle -->
+    <script>
+      const steps = document.querySelectorAll(".step");
+      const nextButton = document.getElementById("next");
+      const prevButton = document.getElementById("prev");
+      const submitButton = document.getElementById("submit");
+      const progressBar = document.getElementById("progress-bar");
+      const progressText = document.getElementById("progress-text");
+      const stepText = document.getElementById("step-text");
+      const themeToggle = document.getElementById("theme-toggle");
+      let currentStep = 0;
+
+      function showStep(index) {
+        steps.forEach((step, i) => {
+          step.classList.toggle("hidden", i !== index);
+        });
+
+        progressBar.style.width = `${(index + 1) * 20}%`;
+        progressText.textContent = `${(index + 1) * 20}%`;
+        stepText.textContent = `Step ${index + 1}`;
+
+        prevButton.classList.toggle("hidden", index === 0);
+        nextButton.classList.toggle("hidden", index === steps.length - 1);
+        submitButton.classList.toggle("hidden", index !== steps.length - 1);
+      }
+
+      nextButton.addEventListener("click", () => {
+        if (validateStep(currentStep)) {
+          currentStep++;
+          showStep(currentStep);
+        }
+      });
+
+      prevButton.addEventListener("click", () => {
+        currentStep--;
+        showStep(currentStep);
+      });
+
+      function validateStep(index) {
+        const requiredFields = steps[index].querySelectorAll("[required]");
+        let isValid = true;
+        requiredFields.forEach((field) => {
+          if (!field.value.trim()) {
+            field.classList.add("border-red-500");
+            field.classList.remove("border-primary");
+            isValid = false;
+          } else {
+            field.classList.remove("border-red-500");
+            field.classList.add("border-primary");
+          }
+        });
+        return isValid;
+      }
+
+      document.getElementById("form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (validateStep(currentStep)) {
+          alert("Form submitted successfully!");
+        }
+      });
+
+      themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+      });
+
+      showStep(currentStep);
+    </script>
+  </body>
+</html>
